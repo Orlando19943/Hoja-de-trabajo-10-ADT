@@ -5,8 +5,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -23,24 +25,20 @@ public class Main {
 	/**
 	 * @param args
 	 */
-	@SuppressWarnings("null")
 	public static void main(String[] args) throws FileNotFoundException, IOException  {
 		// TODO Auto-generated method stub
-		int n1,n2,n3 = 0; //Contador para la posicion de la primera coma
+		int m,n,n1,n2,n3,peso = 0; //Contador para la posicion de la primera coma
+		String cadena,cadena2="";
 		ArrayList <String> nodos = new ArrayList<String>();
-		ArrayList<String> listaNodos = new ArrayList<String>();
 		ArrayList <String> costos = new ArrayList<String>();
 		Scanner teclado = new Scanner (System.in);
 		//Cambiar esto para que le de al usuario la opcion de ingresar el nombre de los documentos (cuando ya este listo el programa)
 		System.out.println("Introduzca el nombre del primer documento (Spanish.txt)"); 
-		String documento, nombre;	
-		String vertice1 = " "; //String que guarda el primer vertice de cada linea
-		String vertice2 = " "; //String que guarda el segundo vertice de cada linea
-		int costo,o = 0,p,peso = 0;	//Variable que guarda el costo de ir de un vertice a otro 
-		int numeroDeVertices = 0;
+		String documento;
+		Controlador controlador;
 		documento = teclado.nextLine();
-		Grafo g;
-		int [][] matriz;
+		int matriz[][];
+		ArrayList<String> listaNodos;
 	
 		
 		//------------------Leer el archivo y ordenar los pacientes por prioridad----------------------
@@ -51,7 +49,6 @@ public class Main {
 	      while((linea = br.readLine()) != null) {	
 	    	  n1 = 0;
 	    	  n2 = 0;
-	    	  o = 0;
 	    	  for (int i = 0; i<linea.length(); i++) {
 	    		  if (linea.substring(i,i+1).equals(" ")&& n1==0){
 	    			 n1 = i; 
@@ -71,71 +68,84 @@ public class Main {
 	      fr.close();
 	    }
 	    catch(Exception e) {
-	      System.out.println("Excepcion leyendo fichero "+ documento + ": " + e);
+	      
 	    }
 
-	    //Hago una lista solamente con los nodos que va a tener el grafo 
+	    
 	    nodos.remove(nodos.size()-1);
-	    listaNodos = new ArrayList<String>(new HashSet<String>(nodos));
-	    for (int i = 0; i<listaNodos.size();i++) {
-	  		  System.out.println("Los vertices son: " + listaNodos.get(i));
-	  	  }
+	    controlador = new Controlador();
+	    controlador.vertices(nodos, costos);
+	    matriz = controlador.obtenerMatriz();
+	    n = 0;
+	    while (n<4) {
+			do {
+				try {
+					System.out.println("Que desea hacer?");
+		    	
+					System.out.println("1.Viajar\n2.Ver ciudad del centro\n3.Modificar rutas\n4.Salir");
+		    	
+					n = teclado.nextInt();
+					
+					if (n == 1) {
+						listaNodos =  (ArrayList<String>) controlador.obtenerVertices().clone();
+						cadena2 = "Las ciudades registradas son: ";
+						for (int i = 0; i < listaNodos.size(); i++) {
+							cadena2 = cadena2 + "\n" + listaNodos.get(i);
+							}
+						System.out.println(cadena2);
+						System.out.println("Cual es su ciudad de origen?");
+						teclado.nextLine();
+						cadena = teclado.nextLine();
+						System.out.println("Hacia que ciudad desea ir?");
+						cadena2 = teclado.nextLine();
+						matriz = controlador.obtenerMatriz();
+						n1 = listaNodos.indexOf(cadena);
+						n2 = listaNodos.indexOf(cadena2);
+						if (n1 >=0 && n2 >=0) {
+							peso = matriz[n1][n2];
+							if (peso == 999999) {
+								System.out.println("No se tiene ningun registro de que sea posible viajar desde "+ cadena + " hasta " + cadena2);
+							}else {
+							System.out.println("La distancia entre las ciudades " + cadena + " y " + cadena2 + " es: " + peso);
+							}
+						}else {
+							System.out.println("Una de las ciudades que ingreso no se encuentra registrada. Recuerde verificar Mayusculas, signos u ortografia");
+						}
+			    	}
+			    	if (n == 2) {
+			    		
+			    		
+			    	}
+			    	if (n == 3) {
+			    		
+			    			System.out.println("1.Interrupcion en el trafico\n2.Nueva ruta");
+				    		m = teclado.nextInt();
+				    		if (m == 1) {
+				    			
+				    			
+
+				    		}//Mostrar las cartas ordenadas por tipo
+				    		if (m == 2) {
+				    			
+				    		} 
+			    		
+			    		
+			    	}
+					
+				}catch (Exception e) {
+					System.out.println("Introduzca correctamente el numero");
+					teclado.nextLine();
+				}
+			}while (n>4||n<0);
 	    
-	    //--------------------------------------------------
-	    n3 = listaNodos.size();
-	    System.out.println("La cantidad de vertices es: " + n3);
-	    g = new Grafo(n3);
-	    matriz = new int [n3][n3];
-	    //Ingreso los nodos al grafo
-	    for (int i = 0; i < n3; i++) {			
-			g.ingresarNombre(i, listaNodos.get(i));
-		}
-	    //--------------------------------------------------
-	    //Saco las parejas y hago las uniones entre cada uno junto con sus costos
-	    n1 = 0;
-	    for (int i = 0; i < n3; i++) {
-	    	n2 =0;
-	    	vertice1 = listaNodos.get(i);
-	    	for (int j = 0; j<nodos.size();j = j+2) {
-	    		if (n1 == n2) {
-	    			matriz [i][i] = -1;
-	    		}else if(vertice1.equals(nodos.get(j))) {
-	    			vertice1 = nodos.get(j+1);
-	    			p = listaNodos.indexOf(vertice1);
-	    			peso = Integer.parseInt(costos.get(j/2));
-	    			matriz [i][p] = peso;
-	    		}
-	    		n2++;
-	    	}
-	    	n1++;
-		}
-	    matriz[n3-1][n3-1] = -1;
 	    
-	    for (int i = 0; i < n3; i++) {
-	    	for (int j = 0; j < n3; j++) {
-	    		if(matriz[i][j]==0) {
-		    		matriz[i][j] = 999999;
-		    	}	
-	    	}
-	    		    	
-		}
-	    for (int i = 0; i < n3; i++) {
-	    	matriz[i][i] = 0;
-	    		    	
-		}
-	    
-	    AllPairShortestPath a = new AllPairShortestPath(); 
-	    a.setV(n3);
-	    a.floydWarshall(matriz);  
-	    
-	    
-	    
-        // Print the solution 
+        
         
 	    
 	    //--------------------------------------------------
 	    
 	    
 	    //
+}
 }
 }

@@ -12,6 +12,8 @@ import java.util.HashSet;
 public class Controlador {
 	int[][] matriz;
 	ArrayList<String> listaNodos;
+	ArrayList<String> nodos;
+	ArrayList<String> costos;
 	
 	public int[][] obtenerMatriz() {
 		return matriz;
@@ -20,17 +22,15 @@ public class Controlador {
 		return listaNodos;
 	}
 	public void vertices(ArrayList<String> nodos,ArrayList<String> costos) {
-		listaNodos = new ArrayList<String>(new HashSet<String>(nodos));
-	    for (int i = 0; i<listaNodos.size();i++) {
-	  		  System.out.println("Las ciudades registradas son: " + listaNodos.get(i));
-	  	  }	    
+		listaNodos = new ArrayList<String>(new HashSet<String>(nodos));   
+		this.nodos = (ArrayList<String>) nodos.clone();
+		this.costos = (ArrayList<String>) costos.clone();
 	    int n3 = listaNodos.size();
-	    System.out.println("La cantidad de vertices es: " + n3);
 	    crearMatriz(n3,nodos,listaNodos,costos);
 	}
 	public void crearMatriz (int n3,ArrayList<String> nodos,ArrayList<String> listaNodos,ArrayList<String> costos) {
 		int n1,n2,p,peso;
-		matriz = new int [n3][n3];
+		matriz = new int [n3][n3];	
 		String vertice1;
 		n1 = 0;
 	    for (int i = 0; i < n3; i++) {
@@ -65,6 +65,36 @@ public class Controlador {
 	    a.setV(n3);
 	    a.floydWarshall(matriz); 
 	}
+	//Funcion solo para ahorrar lineas de codigo (ya son muchas :( )
+		public void crearGrafo () {
+			int n3 = listaNodos.size();
+			int n1 = 0,p,peso = 0;
+		    Grafo g = new Grafo(listaNodos.size());
+		    for (int i =0; i<listaNodos.size();i++) {
+		    	g.ingresarNombre(i, listaNodos.get(i));
+		    }
+		    for (int i = 0; i < n3; i++) {
+		    	int n2 =0;
+		    	String vertice1 = listaNodos.get(i);
+		    	String vertice2 = "";
+		    	for (int j = 0; j < nodos.size();j = j+2) {
+		    		if(vertice1.equals(nodos.get(j))) {
+		    			p = listaNodos.indexOf(vertice1);
+		    			peso = Integer.parseInt(costos.get(j/2));
+		    			g.ingresarArco(i, p, peso);	
+		    			g.calcular();
+		    		}else {
+		    			p = listaNodos.indexOf(vertice1);
+		    			g.ingresarArco(i, p, 999999);
+		    		}
+		    		n2++;
+		    	}
+		    	n1++;
+			}
+		    
+		    
+		    
+	    }
 	
 
 }

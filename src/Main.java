@@ -28,7 +28,7 @@ public class Main {
 	public static void main(String[] args) throws FileNotFoundException, IOException  {
 		// TODO Auto-generated method stub
 		int m,n,n1,n2,n3,peso = 0; //Contador para la posicion de la primera coma
-		String cadena,cadena2="";
+		String cadena,cadena2,cadena3="";
 		ArrayList <String> nodos = new ArrayList<String>();
 		ArrayList <String> costos = new ArrayList<String>();
 		Scanner teclado = new Scanner (System.in);
@@ -75,7 +75,10 @@ public class Main {
 	    nodos.remove(nodos.size()-1);
 	    controlador = new Controlador();
 	    controlador.vertices(nodos, costos);
+	    controlador.crearGrafo();
+	    listaNodos =  (ArrayList<String>) controlador.obtenerVertices().clone();
 	    matriz = controlador.obtenerMatriz();
+	    Grafo g = new Grafo(listaNodos.size());
 	    n = 0;
 	    while (n<4) {
 			do {
@@ -85,7 +88,6 @@ public class Main {
 					System.out.println("1.Viajar\n2.Ver ciudad del centro\n3.Modificar rutas\n4.Salir");
 		    	
 					n = teclado.nextInt();
-					
 					if (n == 1) {
 						listaNodos =  (ArrayList<String>) controlador.obtenerVertices().clone();
 						cadena2 = "Las ciudades registradas son: ";
@@ -93,10 +95,10 @@ public class Main {
 							cadena2 = cadena2 + "\n" + listaNodos.get(i);
 							}
 						System.out.println(cadena2);
-						System.out.println("Cual es su ciudad de origen?");
+						System.out.println("Cual es su ciudad de origen?(escriba el nombre exactamente igual)");
 						teclado.nextLine();
 						cadena = teclado.nextLine();
-						System.out.println("Hacia que ciudad desea ir?");
+						System.out.println("Hacia que ciudad desea ir?(escriba el nombre exactamente igual)");
 						cadena2 = teclado.nextLine();
 						matriz = controlador.obtenerMatriz();
 						n1 = listaNodos.indexOf(cadena);
@@ -107,6 +109,7 @@ public class Main {
 								System.out.println("No se tiene ningun registro de que sea posible viajar desde "+ cadena + " hasta " + cadena2);
 							}else {
 							System.out.println("La distancia entre las ciudades " + cadena + " y " + cadena2 + " es: " + peso);
+							System.out.println("El recorrido es: " + g.pesominimo(n1, n2));
 							}
 						}else {
 							System.out.println("Una de las ciudades que ingreso no se encuentra registrada. Recuerde verificar Mayusculas, signos u ortografia");
@@ -117,23 +120,60 @@ public class Main {
 			    		
 			    	}
 			    	if (n == 3) {
-			    		
+			    			
 			    			System.out.println("1.Interrupcion en el trafico\n2.Nueva ruta");
 				    		m = teclado.nextInt();
 				    		if (m == 1) {
-				    			
-				    			
+				    			n1 = 1;
+				    			for (int i =0; i<nodos.size();i = i+2) {
+				    				cadena = nodos.get(i);
+				    				cadena2 = nodos.get(i+1);
+				    				peso = Integer.parseInt(costos.get(i/2));
+				    				System.out.println(n1 +"." + cadena + "->" + cadena2 +" "+ peso);
+				    				n1++;
+				    			}
+				    			System.out.println("Que ruta desea cambiar?");
+				    			n2 = teclado.nextInt();
+				    			System.out.println("Que distancia nueva desea cambiarle? (si desea bloquear esta ruta, escriba 'eliminar'");
+				    			teclado.nextLine();
+				    			cadena = teclado.nextLine();
+				    			if (cadena.equals("eliminar")) {
+				    				costos.remove(n2-1);
+				    				nodos.remove((n2-1)*2);
+				    				nodos.remove((n2-1)*2);
+				    			}else {
+				    				costos.set(n2-1, cadena);
+				    			}
+				    			controlador.vertices(nodos, costos);
+				    		    controlador.crearGrafo();
+				    		    listaNodos =  (ArrayList<String>) controlador.obtenerVertices().clone();
+				    		    matriz = controlador.obtenerMatriz();
+				    			 
 
-				    		}//Mostrar las cartas ordenadas por tipo
-				    		if (m == 2) {
-				    			
+				    		}
+				    		else if (m == 2) {
+				    			System.out.println("Ingrese la nueva ruta");
+				    			System.out.println("Ciudad inicial: ");
+				    			teclado.nextLine();
+				    			cadena = teclado.nextLine();
+				    			System.out.println("Ciudad destino: ");
+				    			cadena2 = teclado.nextLine();
+				    			System.out.println("Distancia entre cada una: ");
+				    			cadena3 = teclado.nextLine();
+				    			nodos.add(cadena);
+				  	    	    nodos.add(cadena2);
+				  	    	    costos.add(cadena3);
+				  	    	    controlador.vertices(nodos, costos);
+				    		    controlador.crearGrafo();
+				    		    listaNodos =  (ArrayList<String>) controlador.obtenerVertices().clone();
+				    		    matriz = controlador.obtenerMatriz();
 				    		} 
 			    		
 			    		
 			    	}
 					
 				}catch (Exception e) {
-					System.out.println("Introduzca correctamente el numero");
+					System.out.println("Introduzca correctamente el numero " + e);
 					teclado.nextLine();
 				}
 			}while (n>4||n<0);
@@ -148,4 +188,5 @@ public class Main {
 	    //
 }
 }
+	
 }

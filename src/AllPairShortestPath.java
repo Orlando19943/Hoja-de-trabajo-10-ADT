@@ -2,8 +2,12 @@ import java.util.*;
 import java.lang.*; 
 import java.io.*; 
 public class AllPairShortestPath {
-	final static int INF = 99999, V = 4; 
-	  
+	final  int INF = 99999;
+	int V = 5; 
+	
+	public void setV (int V) {
+		this.V = V;
+	}
     void floydWarshall(int graph[][]) 
     { 
         int dist[][] = new int[V][V]; 
@@ -38,7 +42,12 @@ public class AllPairShortestPath {
                     // If vertex k is on the shortest path from 
                     // i to j, then update the value of dist[i][j] 
                     if (dist[i][k] + dist[k][j] < dist[i][j]) 
-                        dist[i][j] = dist[i][k] + dist[k][j]; 
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                    if ( dist[i][k] != INF && 
+                    	     dist[k][j] != INF && 
+                    	     dist[i][k] + dist[k][j] < dist[i][j]
+                    	    )
+                    	 dist[i][j] = dist[i][k] + dist[k][j];
                 } 
             } 
         } 
@@ -51,14 +60,16 @@ public class AllPairShortestPath {
         { 
             System.out.println("The following matrix shows the shortest "+ 
                              "distances between every pair of vertices"); 
+            
             for (int i=0; i<V; ++i) 
             { 
                 for (int j=0; j<V; ++j) 
                 { 
-                    if (dist[i][j]==INF) 
+                    if (dist[i][j]==999999) 
                         System.out.print("INF "); 
                     else
-                        System.out.print(dist[i][j]+"   "); 
+                        System.out.print(dist[i][j]+"   ");
+                    
                 } 
                 System.out.println(); 
             } 

@@ -1,10 +1,5 @@
 Mixco Antigua 30
 Antigua Escuintla 25
 Escuintla SantaLucia 15
+Antigua Guatemala 10
 
-
-//Crear una lista donde guarde el nombre de los enlaces
-//Utilizar como nodos las posiciones de la lista (el costo no lo cuentes)
-//Generar el grafo y probar si mi idea funciona :)
-//Si funciona, pensar en como meter el grafo en el algoritmo
-//Morir

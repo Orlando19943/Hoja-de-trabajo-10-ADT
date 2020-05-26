@@ -19,7 +19,7 @@ class PruebasUnitariasGrafo {
 		String a = g.getNombre(0);
 		String b = g.getNombre(1);
 		if (a.equals("nodo1")&&b.equals("nodob")) {
-			assertEquals(1,1);
+			assertEquals(2,1);
 		}else {
 		assertEquals(1,1);
 		}

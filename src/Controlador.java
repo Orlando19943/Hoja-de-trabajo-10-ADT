@@ -29,27 +29,30 @@ public class Controlador {
 	    crearMatriz(n3,nodos,listaNodos,costos);
 	}
 	public void crearMatriz (int n3,ArrayList<String> nodos,ArrayList<String> listaNodos,ArrayList<String> costos) {
-		int n1,n2,p,peso;
+		int n1,n2,n4 = 0,p,peso;
 		matriz = new int [n3][n3];	
 		String vertice1;
 		n1 = 0;
-	    for (int i = 0; i < n3; i++) {
-	    	n2 =0;
+	    for (int i = 0; i < listaNodos.size(); i++) {
+	    	n2 =0;	    	
 	    	vertice1 = listaNodos.get(i);
 	    	for (int j = 0; j<nodos.size();j = j+2) {
 	    		if (n1 == n2) {
 	    			matriz [i][i] = -1;
-	    		}else if(vertice1.equals(nodos.get(j))) {
-	    			vertice1 = nodos.get(j+1);
-	    			p = listaNodos.indexOf(vertice1);
+	    		}else if(vertice1.compareTo(nodos.get(j))==0) {
+	    			p = listaNodos.indexOf(nodos.get(j+1));
 	    			peso = Integer.parseInt(costos.get(j/2));
 	    			matriz [i][p] = peso;
+	    			
+	    			n4++;
 	    		}
 	    		n2++;
+	    		
 	    	}
+	    	
+	    	n4 = 0;
 	    	n1++;
 		}
-	    matriz[n3-1][n3-1] = -1;
 	    
 	    for (int i = 0; i < n3; i++) {
 	    	for (int j = 0; j < n3; j++) {
@@ -61,39 +64,78 @@ public class Controlador {
 	    for (int i = 0; i < n3; i++) {
 	    	matriz[i][i] = 0;	    		    	
 		}
+	    
 	    AllPairShortestPath a = new AllPairShortestPath(); 
 	    a.setV(n3);
-	    a.floydWarshall(matriz); 
+	    matriz = a.floydWarshall(matriz);
+
+	    
+	     
+	}
+	public String centroGrafo () {
+		ArrayList<Integer> centros = new ArrayList<Integer>();
+		int menor = matriz[0][1];
+		int n = 0,n1 =0;
+		String centro = "";
+		for (int i =0; i<listaNodos.size();i++) {
+			if (matriz[0][i] !=0) {
+			menor = matriz[0][i];
+			}
+			for (int j =0; j<listaNodos.size();j++) {
+			    if (menor < matriz[j][i]&& i != j) {
+			    	menor = matriz[j][i];			    	
+			    }
+			   }
+			centros.add(menor);
+		   }
+		n = centros.get(0);
+		for (int i =0; i<centros.size();i++) {
+			if (n > centros.get(i)) {
+		    	n = centros.get(i);
+		    }
+		   }
+		n1 = centros.indexOf(n);
+		centro = listaNodos.get(n1);
+		return "El centro del grafo es: " + centro;
 	}
 	//Funcion solo para ahorrar lineas de codigo (ya son muchas :( )
-		public void crearGrafo () {
-			int n3 = listaNodos.size();
-			int n1 = 0,p,peso = 0;
+		public String crearGrafo (int l, int h) {
+			int p,peso = 0;
+			boolean estado = false;
+			String caminoCorto = "";
 		    Grafo g = new Grafo(listaNodos.size());
 		    for (int i =0; i<listaNodos.size();i++) {
 		    	g.ingresarNombre(i, listaNodos.get(i));
 		    }
-		    for (int i = 0; i < n3; i++) {
-		    	int n2 =0;
+		    for (int i = 0; i < listaNodos.size(); i++) {
 		    	String vertice1 = listaNodos.get(i);
-		    	String vertice2 = "";
 		    	for (int j = 0; j < nodos.size();j = j+2) {
 		    		if(vertice1.equals(nodos.get(j))) {
-		    			p = listaNodos.indexOf(vertice1);
-		    			peso = Integer.parseInt(costos.get(j/2));
-		    			g.ingresarArco(i, p, peso);	
-		    			g.calcular();
+		    			estado = true;		    			
 		    		}else {
-		    			p = listaNodos.indexOf(vertice1);
-		    			g.ingresarArco(i, p, 999999);
+		    			estado = false;
 		    		}
-		    		n2++;
 		    	}
-		    	n1++;
+		    	for (int j = 0; j < nodos.size();j = j+2) {
+		    		if(vertice1.equals(nodos.get(j) ) && estado) {
+		    			p = listaNodos.indexOf(nodos.get(j+1));
+		    			peso = Integer.parseInt(costos.get(j/2));
+		    			System.out.println("Parejas " + listaNodos.get(i) + " " +listaNodos.get(p) + " Peso " + peso); 
+		    			g.ingresarArco(i, p, peso);			    			
+		    		}else if (!vertice1.equals(nodos.get(j)) && !estado) {
+		    			p = listaNodos.indexOf(nodos.get(j+1));
+		    			g.ingresarArco(i, p, 999999);		
+		    		}
+		    	}
 			}
 		    
-		    
-		    
+		    g.calcular();
+		    caminoCorto = "" + g.caminocorto(l, h);
+		    System.out.println("asdasd");  
+		    return caminoCorto;
+
+
+
 	    }
 	
 

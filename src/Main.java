@@ -69,16 +69,11 @@ public class Main {
 	    }
 	    catch(Exception e) {
 	      
-	    }
-
-	    
-	    nodos.remove(nodos.size()-1);
+	    }    
 	    controlador = new Controlador();
 	    controlador.vertices(nodos, costos);
-	    controlador.crearGrafo();
-	    listaNodos =  (ArrayList<String>) controlador.obtenerVertices().clone();
+	    listaNodos =  controlador.obtenerVertices();
 	    matriz = controlador.obtenerMatriz();
-	    Grafo g = new Grafo(listaNodos.size());
 	    n = 0;
 	    while (n<4) {
 			do {
@@ -89,7 +84,7 @@ public class Main {
 		    	
 					n = teclado.nextInt();
 					if (n == 1) {
-						listaNodos =  (ArrayList<String>) controlador.obtenerVertices().clone();
+						listaNodos =  controlador.obtenerVertices();
 						cadena2 = "Las ciudades registradas son: ";
 						for (int i = 0; i < listaNodos.size(); i++) {
 							cadena2 = cadena2 + "\n" + listaNodos.get(i);
@@ -109,15 +104,20 @@ public class Main {
 								System.out.println("No se tiene ningun registro de que sea posible viajar desde "+ cadena + " hasta " + cadena2);
 							}else {
 							System.out.println("La distancia entre las ciudades " + cadena + " y " + cadena2 + " es: " + peso);
-							System.out.println("El recorrido es: " + g.pesominimo(n1, n2));
+							System.out.println(controlador.crearGrafo(n1, n2));
 							}
 						}else {
 							System.out.println("Una de las ciudades que ingreso no se encuentra registrada. Recuerde verificar Mayusculas, signos u ortografia");
 						}
 			    	}
 			    	if (n == 2) {
-			    		
-			    		
+			    		controlador.vertices(nodos, costos);
+			    	    listaNodos =  controlador.obtenerVertices();
+			    	    matriz = controlador.obtenerMatriz();
+			    	    AllPairShortestPath a = new AllPairShortestPath(); 
+			    	    a.setV(listaNodos.size());
+			    	    matriz = a.floydWarshall(matriz);
+			    	    System.out.println(controlador.centroGrafo());
 			    	}
 			    	if (n == 3) {
 			    			
@@ -145,8 +145,7 @@ public class Main {
 				    				costos.set(n2-1, cadena);
 				    			}
 				    			controlador.vertices(nodos, costos);
-				    		    controlador.crearGrafo();
-				    		    listaNodos =  (ArrayList<String>) controlador.obtenerVertices().clone();
+				    		    listaNodos =  controlador.obtenerVertices();
 				    		    matriz = controlador.obtenerMatriz();
 				    			 
 
@@ -164,8 +163,7 @@ public class Main {
 				  	    	    nodos.add(cadena2);
 				  	    	    costos.add(cadena3);
 				  	    	    controlador.vertices(nodos, costos);
-				    		    controlador.crearGrafo();
-				    		    listaNodos =  (ArrayList<String>) controlador.obtenerVertices().clone();
+				    		    listaNodos =  controlador.obtenerVertices();
 				    		    matriz = controlador.obtenerMatriz();
 				    		} 
 			    		

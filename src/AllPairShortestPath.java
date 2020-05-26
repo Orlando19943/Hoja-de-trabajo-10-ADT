@@ -8,7 +8,7 @@ public class AllPairShortestPath {
 	public void setV (int V) {
 		this.V = V;
 	}
-    void floydWarshall(int graph[][]) 
+    int[][] floydWarshall(int graph[][]) 
     { 
         int dist[][] = new int[V][V]; 
         int i, j, k; 
@@ -53,7 +53,8 @@ public class AllPairShortestPath {
         } 
   
         // Print the shortest distance matrix 
-        printSolution(dist);
+        printSolution (dist);
+        return dist;
         }
         
         void printSolution(int dist[][]) 

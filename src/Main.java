@@ -27,23 +27,22 @@ public class Main {
 	 */
 	public static void main(String[] args) throws FileNotFoundException, IOException  {
 		// TODO Auto-generated method stub
-		int m,n,n1,n2,n3,peso = 0; //Contador para la posicion de la primera coma
-		String cadena,cadena2,cadena3="";
-		ArrayList <String> nodos = new ArrayList<String>();
-		ArrayList <String> costos = new ArrayList<String>();
+		int m,n,n1,n2,n3,peso = 0; //Contadores que utilizo para varias funciones
+		String cadena,cadena2,cadena3="";//Cadenas donde guardo temporarmente datos
+		ArrayList <String> nodos = new ArrayList<String>();//Los nodos
+		ArrayList <String> costos = new ArrayList<String>();//Los costos o las distancias (miralo como quieras :) )
 		Scanner teclado = new Scanner (System.in);
 		//Cambiar esto para que le de al usuario la opcion de ingresar el nombre de los documentos (cuando ya este listo el programa)
-		System.out.println("Introduzca el nombre del primer documento (Spanish.txt)"); 
+		System.out.println("Introduzca el nombre del primer documento (guategrafo.txt)"); 
 		String documento;
 		Controlador controlador;
 		documento = teclado.nextLine();
 		int matriz[][];
 		ArrayList<String> listaNodos;
-	
 		
-		//------------------Leer el archivo y ordenar los pacientes por prioridad----------------------
+		//------------------Leer el archivo y sacar los vertices----------------------
 	    try {
-	      FileReader fr = new FileReader("guategrafo.txt");
+	      FileReader fr = new FileReader(documento);
 	      BufferedReader br = new BufferedReader(fr);
 	      String linea;	      
 	      while((linea = br.readLine()) != null) {	
@@ -68,19 +67,19 @@ public class Main {
 	      fr.close();
 	    }
 	    catch(Exception e) {
-	      
+	      System.out.println("No se encontro el archivo");
 	    }    
 	    controlador = new Controlador();
 	    controlador.vertices(nodos, costos);
 	    listaNodos =  controlador.obtenerVertices();
 	    matriz = controlador.obtenerMatriz();
 	    n = 0;
-	    while (n<4) {
+	    while (n<5) {
 			do {
 				try {
 					System.out.println("Que desea hacer?");
 		    	
-					System.out.println("1.Viajar\n2.Ver ciudad del centro\n3.Modificar rutas\n4.Salir");
+					System.out.println("1.Viajar\n2.Ver ciudad del centro\n3.Modificar rutas\n4.Ver matriz\n5.Salir");
 		    	
 					n = teclado.nextInt();
 					if (n == 1) {
@@ -169,12 +168,24 @@ public class Main {
 			    		
 			    		
 			    	}
+			    	if (n == 4) {
+			    		listaNodos = controlador.obtenerVertices();
+			    		System.out.println("El numero representa la fila/columna en la que se encuentra la ciudad de izquierda a derecha");
+			    		for (int i = 0; i< listaNodos.size();i++) {
+			    			System.out.println(i+1 +"." +listaNodos.get(i));
+			    		}
+			    		AllPairShortestPath a = new AllPairShortestPath();
+			    		matriz = controlador.obtenerMatriz();
+			    	    a.setV(listaNodos.size());
+			    	    a.floydWarshall(matriz);
+			    	    a.printSolution(matriz);	
+			    	}
 					
 				}catch (Exception e) {
 					System.out.println("Introduzca correctamente el numero " + e);
 					teclado.nextLine();
 				}
-			}while (n>4||n<0);
+			}while (n>5||n<0);
 	    
 	    
         

@@ -41,8 +41,7 @@ class PruebasUnitariasGrafo {
 		g.ingresarArco(3, 1, 99999);
 		g.ingresarArco(3, 2, 99999);
 		g.calcular();
-		System.out.println(g.caminocorto(0, 1));
-		assertEquals(1,1);
+		assertEquals(g.pesominimo(0, 1),20);
 		
 	}
 

@@ -1,13 +1,26 @@
 import java.util.*; 
 import java.lang.*; 
 import java.io.*; 
+/**
+ * 
+ * @author Orlando
+ * @author https://www.geeksforgeeks.org/floyd-warshall-algorithm-dp-16/
+ */
 public class AllPairShortestPath {
 	final  int INF = 99999;
 	int V = 5; 
-	
+	/**
+	 * @post: crea la matriz con la cantidad de filas y columnas segun vertices haya
+	 * @param V
+	 */
 	public void setV (int V) {
 		this.V = V;
 	}
+	/**
+	 * @pre: Existen una matriz de adyacencia
+	 * @post: Devuelve la matriz ya usando el algorito de floyd
+	 * @return la matriz 
+	 */
     int[][] floydWarshall(int graph[][]) 
     { 
         int dist[][] = new int[V][V]; 
@@ -51,16 +64,12 @@ public class AllPairShortestPath {
                 } 
             } 
         } 
-  
-        // Print the shortest distance matrix 
-        printSolution (dist);
         return dist;
         }
         
         void printSolution(int dist[][]) 
         { 
-            System.out.println("The following matrix shows the shortest "+ 
-                             "distances between every pair of vertices"); 
+            
             
             for (int i=0; i<V; ++i) 
             { 

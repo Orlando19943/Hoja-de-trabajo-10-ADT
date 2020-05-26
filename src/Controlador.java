@@ -14,13 +14,27 @@ public class Controlador {
 	ArrayList<String> listaNodos;
 	ArrayList<String> nodos;
 	ArrayList<String> costos;
-	
+	/**
+	 * @pre: Existen vertices
+	 * @post: Devuelve la matriz asociada con las relaciones de los vertices
+	 * @return la matriz 
+	 */
 	public int[][] obtenerMatriz() {
 		return matriz;
 	}
+	/**
+	 * @pre: Existen vertices
+	 * @post: Devuelve los vertices
+	 * @return los vertices
+	 */
 	public ArrayList<String> obtenerVertices() {
 		return listaNodos;
 	}
+	/**
+	 * @pre: Existen vertices
+	 * @post: Crea los datos necesarios para hacer la matriz
+	 * 
+	 */
 	public void vertices(ArrayList<String> nodos,ArrayList<String> costos) {
 		listaNodos = new ArrayList<String>(new HashSet<String>(nodos));   
 		this.nodos = (ArrayList<String>) nodos.clone();
@@ -28,6 +42,11 @@ public class Controlador {
 	    int n3 = listaNodos.size();
 	    crearMatriz(n3,nodos,listaNodos,costos);
 	}
+	/**
+	 * @pre: Existen vertices
+	 * @post: Crea la matriz
+	 * 
+	 */
 	public void crearMatriz (int n3,ArrayList<String> nodos,ArrayList<String> listaNodos,ArrayList<String> costos) {
 		int n1,n2,n4 = 0,p,peso;
 		matriz = new int [n3][n3];	
@@ -67,11 +86,13 @@ public class Controlador {
 	    
 	    AllPairShortestPath a = new AllPairShortestPath(); 
 	    a.setV(n3);
-	    matriz = a.floydWarshall(matriz);
-
-	    
-	     
+	    matriz = a.floydWarshall(matriz);	    	     
 	}
+	/**
+	 * @pre: Existen vertices
+	 * @post: Devuelve el centro del grafo
+	 * @return el centro del grafo 
+	 */
 	public String centroGrafo () {
 		ArrayList<Integer> centros = new ArrayList<Integer>();
 		int menor = matriz[0][1];
@@ -98,7 +119,11 @@ public class Controlador {
 		centro = listaNodos.get(n1);
 		return "El centro del grafo es: " + centro;
 	}
-	//Funcion solo para ahorrar lineas de codigo (ya son muchas :( )
+	/**
+	 * @pre: Existen vertices
+	 * @post: Crea el grafo
+	 * @return el camino corto entre dos vertices
+	 */
 		public String crearGrafo (int l, int h) {
 			int p,peso = 0;
 			boolean estado = false;
@@ -120,18 +145,15 @@ public class Controlador {
 		    		if(vertice1.equals(nodos.get(j) ) && estado) {
 		    			p = listaNodos.indexOf(nodos.get(j+1));
 		    			peso = Integer.parseInt(costos.get(j/2));
-		    			System.out.println("Parejas " + listaNodos.get(i) + " " +listaNodos.get(p) + " Peso " + peso); 
 		    			g.ingresarArco(i, p, peso);			    			
 		    		}else if (!vertice1.equals(nodos.get(j)) && !estado) {
 		    			p = listaNodos.indexOf(nodos.get(j+1));
 		    			g.ingresarArco(i, p, 999999);		
 		    		}
 		    	}
-			}
-		    
+			}	    
 		    g.calcular();
-		    caminoCorto = "" + g.caminocorto(l, h);
-		    System.out.println("asdasd");  
+		    caminoCorto = g.caminocorto(l, h);
 		    return caminoCorto;
 
 
